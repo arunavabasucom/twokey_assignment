@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
+import { SessionProvider } from "next-auth/react";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -21,7 +22,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <SessionProvider>
+            {children}
+          </SessionProvider>
+            
         </ThemeProvider>
       </body>
     </html>

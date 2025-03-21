@@ -1,15 +1,18 @@
+"use client";
 import type React from "react";
 import { GalleryVerticalEnd } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+
+import { useSession,signIn } from 'next-auth/react'
+
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const { data: session } = useSession();
+  console.log(session);
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <form>
@@ -22,12 +25,12 @@ export function LoginForm({
               <div className="flex h-8 w-8 items-center justify-center rounded-md">
                 <GalleryVerticalEnd className="size-6" />
               </div>
-              <span className="sr-only">Acme Inc.</span>
+              <span className="sr-only">TwoKey Pvt Ltd.</span>
             </a>
-            <h1 className="text-xl font-bold">Welcome to TwoKey Inc.</h1>
+            <h1 className="text-xl font-bold">Welcome to TwoKey Pvt Ltd.</h1>
           </div>
           <div className="flex flex-col gap-6">
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" onClick={() => signIn()}>
               Sign In
             </Button>
           </div>
