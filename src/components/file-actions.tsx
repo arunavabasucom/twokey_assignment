@@ -15,18 +15,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { fileUpload } from "@/app/api/fileUpload";
 import { addFolder } from "@/app/api/addFiledb";
+import { useSession } from "next-auth/react";
 
 interface FileActionsProps {
-  parentFolderId: string | undefined;
+  parentId: string | undefined;
 }
 
-export function FileActions({ parentFolderId }: FileActionsProps) {
+export function FileActions({ parentId }: FileActionsProps) {
   //   const [fiile , setFile] = useState(null);
   //     const uploadFile = () => {
 
   //   }
-  console.log("parentFolderId", parentFolderId);
-  
+  console.log("parentId", parentId);
+  const { data: session } = useSession();
   const [isCreateFolderOpen, setIsCreateFolderOpen] = useState(false);
   const [folderName, setFolderName] = useState("");
 
@@ -39,7 +40,7 @@ export function FileActions({ parentFolderId }: FileActionsProps) {
       const files = (e.target as HTMLInputElement).files;
       if (files && files.length > 0) {
         console.log("Files selected:", files);
-        fileUpload(files[0],parentFolderId,sessio);
+        fileUpload(files[0], parentId, session?.user.email);
       }
     };
   };
@@ -52,7 +53,8 @@ export function FileActions({ parentFolderId }: FileActionsProps) {
         fileList: [],
         folderName,
         isFolder: true,
-        parentFolderId: parentFolderId || "",
+        parentId: parentId || "",
+        userEmail: session?.user.email,
       });
       setFolderName("");
       setIsCreateFolderOpen(false);
