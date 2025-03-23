@@ -16,16 +16,13 @@ import { Label } from "@/components/ui/label";
 import { fileUpload } from "@/app/api/fileUpload";
 import { addFolder } from "@/app/api/addFiledb";
 import { useSession } from "next-auth/react";
-
+import { toast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
 interface FileActionsProps {
   parentId: string | undefined;
 }
 
 export function FileActions({ parentId }: FileActionsProps) {
-  //   const [fiile , setFile] = useState(null);
-  //     const uploadFile = () => {
-
-  //   }
   console.log("parentId", parentId);
   const { data: session } = useSession();
   const [isCreateFolderOpen, setIsCreateFolderOpen] = useState(false);
@@ -41,6 +38,9 @@ export function FileActions({ parentId }: FileActionsProps) {
       if (files && files.length > 0) {
         console.log("Files selected:", files);
         fileUpload(files[0], parentId, session?.user.email);
+        toast({
+          title: "File uploaded successfully",
+        });
       }
     };
   };
@@ -58,6 +58,9 @@ export function FileActions({ parentId }: FileActionsProps) {
       });
       setFolderName("");
       setIsCreateFolderOpen(false);
+        toast({
+          title: "Folder created",
+        });
       console.log("Created folder:", folderName);
       // In a real app, you would make an API call to create the folder
     }
@@ -110,6 +113,7 @@ export function FileActions({ parentId }: FileActionsProps) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <Toaster />
     </div>
   );
 }
