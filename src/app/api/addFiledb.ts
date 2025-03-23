@@ -9,7 +9,7 @@ interface AddfiolderdbProps {
   folderName: string;
   fileList: any;
   isFolder: boolean;
-  parenFolderId?: string;
+  parentFolderId?: string;
 }
 
 const files = collection(db, "files");
@@ -30,14 +30,14 @@ export const addFolder = ({
   folderName,
   fileList,
   isFolder,
-  parenFolderId,
+  parentFolderId,
 }: AddfiolderdbProps) => {
   try {
     const folderdoc = addDoc(files, {
       folderName,
       fileList,
       isFolder,
-      parenFolderId,
+      parentFolderId,
     });
   } catch (e) {
     console.error("Error adding document: ", e);

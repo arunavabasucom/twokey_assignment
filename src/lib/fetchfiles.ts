@@ -18,8 +18,8 @@ export const fetchFiles = (parentFolderId ) => {
            ...doc.data(),
          }))
          .filter((file) => {
-           // Check both parenFolderId and parentFolderId to handle the typo
-           const folderParentId = file.parenFolderId || file.parentFolderId;
+          //  // Check both parenFolderId and parentFolderId to handle the typo
+           const folderParentId = file.parentFolderId;
 
            if (!parentFolderId) {
              return !folderParentId || folderParentId === "";

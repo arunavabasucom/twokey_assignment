@@ -52,7 +52,7 @@ export function FileActions({ parentFolderId }: FileActionsProps) {
         fileList: [],
         folderName,
         isFolder: true,
-        parenFolderId: parentFolderId || "",
+        parentFolderId: parentFolderId || "",
       });
       setFolderName("");
       setIsCreateFolderOpen(false);
