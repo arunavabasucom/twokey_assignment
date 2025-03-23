@@ -1,6 +1,6 @@
 import { storage } from "@/firebase.config";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { addFiles } from "@/API/Firestore";
+import { addFiles } from "./addFiledb";
 
 export const fileUpload = (
   file: any,
@@ -18,17 +18,20 @@ export const fileUpload = (
         (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
       );
       console.log("Upload is " + progress + "% done");
-
     },
     (error) => {
       alert(error);
     },
     () => {
-      getDownloadURL(uploadTask.snapshot.ref).then(
+      const durl = getDownloadURL(uploadTask.snapshot.ref).then(
         (downloadURL) => {
           // addFiles(downloadURL, file.name, parentId, userEmail, ownerEmail);
+          addFiles({
+            url: downloadURL,
+            name: file.name,
+          });
           console.log("File available at", downloadURL);
-      }
+        },
       );
     },
   );
