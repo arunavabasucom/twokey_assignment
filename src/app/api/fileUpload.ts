@@ -4,10 +4,8 @@ import { addFiles } from "./addFiledb";
 
 export const fileUpload = (
   file: any,
-
-  parentId: string,
-  userEmail: string,
-  ownerEmail: string,
+  parentId: any,
+  userEmail: any,
 ) => {
   const storageRef = ref(storage, `files/${file.name}`);
   const uploadTask = uploadBytesResumable(storageRef, file);
@@ -30,6 +28,8 @@ export const fileUpload = (
             url: downloadURL,
             name: file.name,
             isFolder: false,
+            parentId,
+            userEmail
           });
           console.log("File available at", downloadURL);
         },

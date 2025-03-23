@@ -4,21 +4,26 @@ interface AddfiledbProps {
   url: string;
   name: string;
   isFolder: boolean;
+  parentId: string | undefined;
+  userEmail: string;
 }
 interface AddfiolderdbProps {
   folderName: string;
   fileList: any;
   isFolder: boolean;
-  parentFolderId?: string;
+  parentId?: string;
+  userEmail: string;
 }
 
 const files = collection(db, "files");
-export const addFiles = ({ name, url,isFolder }: AddfiledbProps) => {
+export const addFiles = ({ name, url, isFolder, parentId ,userEmail}: AddfiledbProps) => {
   try {
     const filedoc = addDoc(files, {
       url,
       name,
-      isFolder
+      isFolder,
+      parentId,
+      userEmail
     });
     // console.log("Document written with ID: ", filedoc);
   } catch (e) {
@@ -30,14 +35,16 @@ export const addFolder = ({
   folderName,
   fileList,
   isFolder,
-  parentFolderId,
+  parentId,
+  userEmail
 }: AddfiolderdbProps) => {
   try {
     const folderdoc = addDoc(files, {
       folderName,
       fileList,
       isFolder,
-      parentFolderId,
+      parentId,
+      userEmail
     });
   } catch (e) {
     console.error("Error adding document: ", e);

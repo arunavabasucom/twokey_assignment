@@ -26,7 +26,7 @@ export function FileActions({ parentFolderId }: FileActionsProps) {
 
   //   }
   console.log("parentFolderId", parentFolderId);
-
+  
   const [isCreateFolderOpen, setIsCreateFolderOpen] = useState(false);
   const [folderName, setFolderName] = useState("");
 
@@ -39,7 +39,7 @@ export function FileActions({ parentFolderId }: FileActionsProps) {
       const files = (e.target as HTMLInputElement).files;
       if (files && files.length > 0) {
         console.log("Files selected:", files);
-        fileUpload(files[0]);
+        fileUpload(files[0],parentFolderId,sessio);
       }
     };
   };

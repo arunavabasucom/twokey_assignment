@@ -10,8 +10,10 @@ export default function Slug() {
   const query = searchParams.get("id");
 
   console.log(query);
-  return (<div>
-    <FileActions parentFolderId={query} /> 
-    <FileGrid parentFolderId={query}/>
-  </div>);
+  return (
+    <div>
+      <FileActions parentId={query} />
+      <FileGrid parentId={query} />
+    </div>
+  );
 }

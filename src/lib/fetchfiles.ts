@@ -2,37 +2,39 @@ import { db } from "@/firebase.config";
 import { onSnapshot, collection } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
+export const fetchFiles = (parentFolderId, userEmail) => {
+  const [fileList, setFileList] = useState([]);
+  const files = collection(db, "files");
 
+  useEffect(() => {
+    console.log("Current parentFolderId:", parentFolderId);
 
-export const fetchFiles = (parentFolderId ) => {
-   const [fileList, setFileList] = useState([]);
-   const files = collection(db, "files");
+    const unsubscribe = onSnapshot(files, (snapshot) => {
+      const filtered_files = snapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .filter((file) => {
+          const folderParentId = file.parentId;
 
-   useEffect(() => {
-     console.log("Current parentFolderId:", parentFolderId);
+          if (!parentFolderId) {
+            return (
+              (!folderParentId || folderParentId === "") &&
+              file.userEmail === userEmail
+            );
+          }
+          return (
+            folderParentId === parentFolderId && file.userEmail === userEmail
+          );
+        });
 
-     const unsubscribe = onSnapshot(files, (snapshot) => {
-       const filtered_files = snapshot.docs
-         .map((doc) => ({
-           id: doc.id,
-           ...doc.data(),
-         }))
-         .filter((file) => {
-          //  // Check both parenFolderId and parentFolderId to handle the typo
-           const folderParentId = file.parentFolderId;
+      console.log("Filtered files:", filtered_files);
+      setFileList(filtered_files);
+    });
 
-           if (!parentFolderId) {
-             return !folderParentId || folderParentId === "";
-           }
-           return folderParentId === parentFolderId;
-         });
+    return () => unsubscribe();
+  }, [parentFolderId, userEmail]);
 
-       console.log("Filtered files:", filtered_files);
-       setFileList(filtered_files);
-     });
-
-     return () => unsubscribe();
-   }, [parentFolderId]);
-
-   return { fileList };
+  return { fileList };
 };

@@ -17,7 +17,6 @@ import { FolderItem } from "./folder-item";
 import { fetchFiles } from "@/lib/fetchfiles";
 import { useRouter } from "next/navigation";
 
-
 interface FileItem {
   id: string;
   name: string;
@@ -25,30 +24,27 @@ interface FileItem {
   modified: string;
 }
 
-
-
 interface FileGridProps {
   path?: string;
 }
 
-export function FileGrid({ parentFolderId }) {
-  console.log("parentFolderId))))", parentFolderId);
-  const { fileList } = fetchFiles(parentFolderId);
+export function FileGrid({ parentId }) {
+  // const {data }
+  console.log("parentId))))", parentId);
+  const { fileList } = fetchFiles(parentId, "tempemailab03@gmail.com");
   console.log("filelist", fileList);
 
-  const openFile = (link:string) => {
+  const openFile = (link: string) => {
     window.open(link);
   };
-  
+
   const router = useRouter();
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
       {fileList.map((file) =>
         file.isFolder ? (
-
-            <FolderItem key={file.id} id={file.id} name={file.folderName} />
-
+          <FolderItem key={file.id} id={file.id} name={file.folderName} />
         ) : (
           <div
             key={file.id}
