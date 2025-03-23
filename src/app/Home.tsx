@@ -5,8 +5,8 @@ import { FileActions } from "@/components/file-actions";
 export default function Home() {
   return (
     <DriveLayout>
-      <FileActions />
-      <FileGrid />
+      <FileActions parentFolderId=""/>
+      <FileGrid parentFolderId=""/>
     </DriveLayout>
   );
 }

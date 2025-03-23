@@ -6,15 +6,15 @@ import { useRouter } from "next/navigation";
 interface FolderItemProps {
   id: string;
   name: string;
-  modified: string;
 }
 
-export function FolderItem({ id, name, modified }: FolderItemProps) {
+export function FolderItem({ id, name }: FolderItemProps) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/${name.toLowerCase()}`);
+    router.push(`/folder?id=${id}`);
   };
+
 
   return (
     <div
@@ -27,9 +27,7 @@ export function FolderItem({ id, name, modified }: FolderItemProps) {
       <div className="mt-2 truncate text-center text-sm font-medium">
         {name}
       </div>
-      <div className="mt-1 text-center text-xs text-muted-foreground">
-        {modified}
-      </div>
+    
     </div>
   );
 }

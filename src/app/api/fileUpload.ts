@@ -29,6 +29,7 @@ export const fileUpload = (
           addFiles({
             url: downloadURL,
             name: file.name,
+            isFolder: false,
           });
           console.log("File available at", downloadURL);
         },

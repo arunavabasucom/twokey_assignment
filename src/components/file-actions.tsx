@@ -14,15 +14,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { fileUpload } from "@/app/api/fileUpload";
+import { addFolder } from "@/app/api/addFiledb";
 
-export function FileActions() {
+interface FileActionsProps {
+  parentFolderId: string | undefined;
+}
 
-//   const [fiile , setFile] = useState(null);
-//     const uploadFile = () => {
-      
-//   }
-    
-    const [isCreateFolderOpen, setIsCreateFolderOpen] = useState(false);
+export function FileActions({ parentFolderId }: FileActionsProps) {
+  //   const [fiile , setFile] = useState(null);
+  //     const uploadFile = () => {
+
+  //   }
+  console.log("parentFolderId", parentFolderId);
+
+  const [isCreateFolderOpen, setIsCreateFolderOpen] = useState(false);
   const [folderName, setFolderName] = useState("");
 
   const handleUpload = () => {
@@ -33,8 +38,8 @@ export function FileActions() {
     input.onchange = (e) => {
       const files = (e.target as HTMLInputElement).files;
       if (files && files.length > 0) {
-          console.log("Files selected:", files);
-          fileUpload(files[0]);
+        console.log("Files selected:", files);
+        fileUpload(files[0]);
       }
     };
   };
@@ -43,8 +48,15 @@ export function FileActions() {
     if (folderName.trim()) {
       // Here you would create the folder in your backend
       console.log("Creating folder:", folderName);
+      addFolder({
+        fileList: [],
+        folderName,
+        isFolder: true,
+        parenFolderId: parentFolderId || "",
+      });
       setFolderName("");
       setIsCreateFolderOpen(false);
+      console.log("Created folder:", folderName);
       // In a real app, you would make an API call to create the folder
     }
   };
@@ -55,7 +67,7 @@ export function FileActions() {
         <Upload className="h-4 w-4" />
         Upload
       </Button>
-    
+
       <Button
         variant="outline"
         onClick={() => setIsCreateFolderOpen(true)}
