@@ -2,10 +2,11 @@ import { storage } from "@/firebase.config";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { addFiles } from "./addFiledb";
 
+ 
 export const fileUpload = (
-  file: any,
-  parentId: any,
-  userEmail: any,
+  file: File,
+  parentId: string | undefined,
+  userEmail: string,
 ) => {
   const storageRef = ref(storage, `files/${file.name}`);
   const uploadTask = uploadBytesResumable(storageRef, file);
@@ -21,19 +22,16 @@ export const fileUpload = (
       alert(error);
     },
     () => {
-      const durl = getDownloadURL(uploadTask.snapshot.ref).then(
-        (downloadURL) => {
-          // addFiles(downloadURL, file.name, parentId, userEmail, ownerEmail);
-          addFiles({
-            url: downloadURL,
-            name: file.name,
-            isFolder: false,
-            parentId,
-            userEmail
-          });
-          console.log("File available at", downloadURL);
-        },
-      );
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        addFiles({
+          name: file.name,
+          url: downloadURL,
+          isFolder: false,
+          parentId,
+          userEmail,
+        });
+        console.log("File available at", downloadURL);
+      });
     },
   );
 };

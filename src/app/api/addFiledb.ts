@@ -1,23 +1,8 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 import { db } from "@/firebase.config";
 import { collection, addDoc } from "firebase/firestore";
-interface AddfiledbProps {
-  url: string;
-  name: string;
-  isFolder: boolean;
-  parentId: string | undefined;
-  userEmail: string;
-}
-interface AddfiolderdbProps {
-  folderName: string;
-  fileList: any;
-  isFolder: boolean;
-  parentId?: string;
-  userEmail: string;
-}
 
 const files = collection(db, "files");
-export const addFiles = ({ name, url, isFolder, parentId ,userEmail}: AddfiledbProps) => {
+export const addFiles = ({ name, url, isFolder, parentId ,userEmail}: Filedb) => {
   try {
  addDoc(files, {
       url,
@@ -33,15 +18,13 @@ export const addFiles = ({ name, url, isFolder, parentId ,userEmail}: AddfiledbP
 
 export const addFolder = ({
   folderName,
-  fileList,
   isFolder,
   parentId,
   userEmail
-}: AddfiolderdbProps) => {
+}: Folderdb) => {
   try {
-    const folderdoc = addDoc(files, {
-      folderName,
-      fileList,
+  addDoc(files, {
+    folderName,
       isFolder,
       parentId,
       userEmail

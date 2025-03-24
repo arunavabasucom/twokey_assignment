@@ -2,8 +2,8 @@ import { db } from "@/firebase.config";
 import { onSnapshot, collection } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
-export const fetchFiles = (parentId, userEmail) => {
-  const [fileList, setFileList] = useState([]);
+export const useFetchFiles = (parentId: string, userEmail: string) => {
+  const [fileList, setFileList] = useState<any[]>([]);
   const files = collection(db, "files");
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export const fetchFiles = (parentId, userEmail) => {
           id: doc.id,
           ...doc.data(),
         }))
-        .filter((file) => {
+        .filter((file: any) => {
           const folderParentId = file.parentId;
 
           if (!parentId) {

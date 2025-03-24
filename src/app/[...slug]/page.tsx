@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useSearchParams } from "next/navigation";
-import Home from "../Home";
 import { FileActions } from "@/components/file-actions";
 import { FileGrid } from "@/components/file-grid";
 import { DriveLayout } from "@/components/drive-layout";

@@ -1,50 +1,65 @@
-"use client";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  FileText,
-  Image,
-  MoreVertical,
-  FileSpreadsheet,
-  FileCode,
-} from "lucide-react";
+import { FileText, MoreVertical } from "lucide-react";
 import { FolderItem } from "./folder-item";
-import { fetchFiles } from "@/lib/fetchfiles";
-import { useRouter } from "next/navigation";
+import { useFetchFiles } from "@/lib/fetchfiles";
+import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { toast } from "@/hooks/use-toast";
 
-interface FileItem {
+interface BaseFile {
   id: string;
+  isFolder: boolean;
+  parentId?: string | null;
+  userEmail?: string;
+}
+
+interface Filedb extends BaseFile {
   name: string;
-  type: "folder" | "document" | "image" | "spreadsheet" | "code";
-  modified: string;
+  url?: string;
+}
+
+interface Folderdb extends BaseFile {
+  folderName: string;
 }
 
 interface FileGridProps {
-  path?: string;
+  parentId: string | null | undefined;
 }
 
-export function FileGrid({ parentId }) {
-  // const {data }
-  console.log("parentId))))", parentId);
-  const { fileList } = fetchFiles(parentId, "tempemailab03@gmail.com");
-  console.log("filelist", fileList);
+export function FileGrid({ parentId }: FileGridProps) {
+  const { data: session } = useSession();
+  const userEmail = session?.user.email;
+  const { fileList } = useFetchFiles(parentId ?? "", userEmail ?? "");
+  const [files, setFiles] = useState<(Filedb | Folderdb)[]>(fileList);
+
+  useEffect(() => {
+    setFiles(fileList);
+  }, [fileList]);
 
   const openFile = (link: string) => {
     window.open(link);
   };
 
-  const router = useRouter();
+  const shareFile = (link: string) => {
+    navigator.clipboard.writeText(link).then(() => {
+      toast({ title: "Link copied to clipboard" });
+    });
+  };
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-      {fileList.map((file) =>
+      {files.map((file: Filedb | Folderdb) =>
         file.isFolder ? (
-          <FolderItem key={file.id} id={file.id} name={file.folderName} />
+          <FolderItem
+            key={file.id}
+            id={file.id ?? ""}
+            name={(file as Folderdb).folderName}
+          />
         ) : (
           <div
             key={file.id}
@@ -56,33 +71,30 @@ export function FileGrid({ parentId }) {
               </div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 opacity-0 group-hover:opacity-100"
-                  >
+                  <button className="h-8 w-8 opacity-0 group-hover:opacity-100">
                     <MoreVertical className="h-4 w-4" />
-                  </Button>
+                  </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem
                     onClick={() => {
-                      openFile(file.url);
+                      openFile((file as Filedb).url ?? "");
                     }}
                   >
                     Open
                   </DropdownMenuItem>
-                  <DropdownMenuItem>Share</DropdownMenuItem>
-                  <DropdownMenuItem>Move</DropdownMenuItem>
-                  <DropdownMenuItem>Rename</DropdownMenuItem>
-                  <DropdownMenuItem className="text-destructive">
-                    Delete
-                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      shareFile((file as Filedb).url ?? "");
+                    }}
+                  >
+                    Share
+                  </DropdownMenuItem>                
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
             <div className="mt-2 truncate text-center text-sm font-medium">
-              {file.name}
+              {(file as Filedb).name}
             </div>
           </div>
         ),
