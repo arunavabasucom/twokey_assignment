@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { db } from "@/firebase.config";
 import { collection, addDoc } from "firebase/firestore";
 interface AddfiledbProps {
@@ -18,14 +19,13 @@ interface AddfiolderdbProps {
 const files = collection(db, "files");
 export const addFiles = ({ name, url, isFolder, parentId ,userEmail}: AddfiledbProps) => {
   try {
-    const filedoc = addDoc(files, {
+ addDoc(files, {
       url,
       name,
       isFolder,
       parentId,
       userEmail
     });
-    // console.log("Document written with ID: ", filedoc);
   } catch (e) {
     console.error("Error adding document: ", e);
   }

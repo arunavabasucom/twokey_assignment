@@ -3,12 +3,14 @@ import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Menu, Search, LogOut } from "lucide-react";
 import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface HeaderProps {
   logo: string | undefined;
 }
 
 export function Header({ logo }: HeaderProps) {
+  const router = useRouter();
   const { data: session } = useSession();
   return (
     <header className="flex items-center justify-between border-b border-border px-4 py-2">
@@ -17,7 +19,7 @@ export function Header({ logo }: HeaderProps) {
           <Menu className="h-5 w-5" />
         </Button>
         <div className="flex items-center gap-2">
-          <div className="text-xl font-bold text-primary">Drive</div>
+          <div className="text-xl font-bold text-primary cursor-pointer" onClick={()=>router.push(`/`)}>Drive</div>
         </div>
       </div>
       <div className="mx-4 max-w-xl flex-1">

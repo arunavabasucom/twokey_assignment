@@ -12,7 +12,7 @@ export function FolderItem({ id, name }: FolderItemProps) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/folder?id=${id}`);
+    router.push(`/folder?id=${id}&name=${name}`);
   };
 
 
