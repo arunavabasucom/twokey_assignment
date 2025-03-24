@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface HeaderProps {
-  logo: string | null | undefined;
+  logo: string | undefined;
 }
 
 export default function Header({ logo }: HeaderProps) {

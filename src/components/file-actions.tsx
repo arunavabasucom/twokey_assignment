@@ -25,7 +25,7 @@ interface FileActionsProps {
 export function FileActions({ parentId }: FileActionsProps) {
   console.log("parentId", parentId);
   const { data: session } = useSession();
-  const userEmail = session?.user.email;
+  const userEmail = session?.user.email || "";
   const [isCreateFolderOpen, setIsCreateFolderOpen] = useState(false);
   const [folderName, setFolderName] = useState("");
 
