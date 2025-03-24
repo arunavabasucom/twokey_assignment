@@ -16,20 +16,15 @@ import { Label } from "@/components/ui/label";
 import { fileUpload } from "@/app/api/fileUpload";
 import { addFolder } from "@/app/api/addFiledb";
 import { useSession } from "next-auth/react";
-import { set } from "zod";
+import { toast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
-import { useToast } from "@/hooks/use-toast";
-import { Progress } from "@/components/ui/progress";
-
 interface FileActionsProps {
   parentId: string | undefined;
 }
 
 export function FileActions({ parentId }: FileActionsProps) {
-  const { data: session } = useSession();
   console.log("parentId", parentId);
-  const { toast } = useToast();
-  const [progress, setProgress] = useState<number>(0);
+  const { data: session } = useSession();
   const [isCreateFolderOpen, setIsCreateFolderOpen] = useState(false);
   const [folderName, setFolderName] = useState("");
 
@@ -43,13 +38,11 @@ export function FileActions({ parentId }: FileActionsProps) {
       if (files && files.length > 0) {
 
         console.log("Files selected:", files);
-
         fileUpload(files[0], parentId, session?.user.email);
-  console.log(progress);
         toast({
-          message: "File uploaded successfully",
+          title: "File uploaded successfully",
         });
-      
+      }
     };
   };
 
@@ -68,6 +61,9 @@ export function FileActions({ parentId }: FileActionsProps) {
       });
       setFolderName("");
       setIsCreateFolderOpen(false);
+        toast({
+          title: "Folder created",
+        });
       console.log("Created folder:", folderName);
       // In a real app, you would make an API call to create the folder
     }

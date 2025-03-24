@@ -2,12 +2,12 @@ import { db } from "@/firebase.config";
 import { onSnapshot, collection } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
-export const fetchFiles = (parentFolderId, userEmail) => {
+export const fetchFiles = (parentId, userEmail) => {
   const [fileList, setFileList] = useState([]);
   const files = collection(db, "files");
 
   useEffect(() => {
-    console.log("Current parentFolderId:", parentFolderId);
+    console.log("Current parentId:", parentId);
 
     const unsubscribe = onSnapshot(files, (snapshot) => {
       const filtered_files = snapshot.docs
@@ -18,15 +18,13 @@ export const fetchFiles = (parentFolderId, userEmail) => {
         .filter((file) => {
           const folderParentId = file.parentId;
 
-          if (!parentFolderId) {
+          if (!parentId) {
             return (
               (!folderParentId || folderParentId === "") &&
               file.userEmail === userEmail
             );
           }
-          return (
-            folderParentId === parentFolderId && file.userEmail === userEmail
-          );
+          return folderParentId === parentId && file.userEmail === userEmail;
         });
 
       console.log("Filtered files:", filtered_files);
@@ -34,7 +32,7 @@ export const fetchFiles = (parentFolderId, userEmail) => {
     });
 
     return () => unsubscribe();
-  }, [parentFolderId, userEmail]);
+  }, [parentId, userEmail]);
 
   return { fileList };
 };
